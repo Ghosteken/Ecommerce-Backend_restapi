@@ -1,0 +1,22 @@
+Given that your Express application is running on http://localhost:3000, here are the request URLs for each operation:
+
+Create a new customer:
+
+POST request URL: http://localhost:3000/customers
+
+Delete a customer by ID:
+
+DELETE request URL: http://localhost:3000/customers/:customerId
+Replace :customerId with the actual ID of the customer you want to delete.
+Update a customer by ID:
+
+PUT request URL: http://localhost:3000/customers/:customerId
+Replace :customerId with the actual ID of the customer you want to update.
+Get all customers:
+
+GET request URL: http://localhost:3000/customers
+Get a single customer by ID:
+
+GET request URL: http://localhost:3000/customers/:customerId
+Replace :customerId with the actual ID of the customer you want to retrieve.
+Make sure to use the appropriate HTTP method and request URL for each operation when interacting with your Express application's API endpoints.
