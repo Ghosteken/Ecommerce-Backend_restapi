@@ -15,3 +15,52 @@
 
 # GET http://localhost:3000/customers
 # Content-Type: application/json
+
+
+{
+  "companyName": "ABC Retailers Inc.",
+  "companyLogo": "https://example.com/logo.jpg",
+  "contactInformation": {
+    "phone": "123-456-7890",
+    "website": "https://www.abcretailers.com",
+    "socialMediaLinks": [
+      "https://facebook.com/abcretailers",
+      "https://twitter.com/abcretailers"
+    ]
+  },
+  "storeLocations": [
+    {
+      "address": {
+        "city": "Anytown",
+        "street": "456 Oak St",
+        "country": "USA",
+        "postCode": "12345"
+      },
+      "productCategories": ["Electronics", "Clothing"]
+    },
+    {
+      "address": {
+        "city": "Othertown",
+        "street": "789 Maple Ave",
+        "country": "USA",
+        "postCode": "54321"
+      },
+      "productCategories": ["Furniture", "Toys"]
+    }
+  ],
+  "contractType": "Full-time",
+  "paymentInformation": "Payment accepted via credit card, PayPal, and cash.",
+  "cleaningInformation": "Stores are cleaned daily.",
+  "damagePolicy": "Customers must report damages within 7 days for refund."
+}
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "accessLevel": 3,
+  "accessToCustomerManagementData": true,
+  "accessToRetailerManagementData": true,
+  "accessToFinancialData": true,
+  "accessToTrackingData": true,
+  "accessToPlatformSettings": true
+}

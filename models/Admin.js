@@ -32,6 +32,26 @@ const adminSchema = new mongoose.Schema(
       type: Number,
       default: 3, 
     },
+    accessToCustomerManagementData: {
+      type: Boolean,
+      default: true,
+    },
+    accessToRetailerManagementData: {
+      type: Boolean,
+      default: true,
+    },
+    accessToFinancialData: {
+      type: Boolean,
+      default: true,
+    },
+    accessToTrackingData: {
+      type: Boolean,
+      default: true,
+    },
+    accessToPlatformSettings: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true },
 );

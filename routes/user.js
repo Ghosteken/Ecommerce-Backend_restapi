@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../Controllers/userController');
 const adminController = require('../Controllers/adminControllers');
+const retailerController = require('../Controllers/retailerController');
 
 
 
@@ -24,6 +25,18 @@ router.put("/api/admins/:adminId", adminController.updateAdmin);
 router.get("/api/admins", adminController.getAllAdmins);
 
 router.get("/api/admins/:adminId", adminController.getAdminById);
+
+/////////////////////Retailer/////////////////
+
+router.post("/api/retailers", retailerController.registerRetailer);
+
+router.put("/api/retailers/:retailerId", retailerController.updateRetailer);
+
+router.get("/api/retailers", retailerController.getAllRetailers);
+
+router.get("/api/retailers/:retailerId", retailerController.getRetailerById);
+
+router.delete("/api/retailers/:retailerId", retailerController.deleteRetailer);
 
 
 module.exports = router;
