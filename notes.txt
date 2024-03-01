@@ -20,3 +20,11 @@ Get a single customer by ID:
 GET request URL: http://localhost:3000/customers/:customerId
 Replace :customerId with the actual ID of the customer you want to retrieve.
 Make sure to use the appropriate HTTP method and request URL for each operation when interacting with your Express application's API endpoints.
+
+GraphQL
+
+Reduced Overfetching and Underfetching: With GraphQL, clients can specify exactly the data they need. This helps to avoid overfetching (receiving more data than necessary) or underfetching (not receiving enough data) common in REST APIs, leading to more efficient data retrieval.
+
+Single Endpoint: GraphQL typically exposes a single endpoint for all queries, mutations, and subscriptions. This simplifies the API surface and reduces the number of network requests needed to fetch data.
+
+Flexible Queries: Clients can specify the shape and structure of the data they need using GraphQL queries. This flexibility allows for more dynamic and tailored data retrieval compared to fixed endpoints in REST APIs.
