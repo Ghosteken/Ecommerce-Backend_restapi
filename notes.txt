@@ -28,3 +28,52 @@ Reduced Overfetching and Underfetching: With GraphQL, clients can specify exactl
 Single Endpoint: GraphQL typically exposes a single endpoint for all queries, mutations, and subscriptions. This simplifies the API surface and reduces the number of network requests needed to fetch data.
 
 Flexible Queries: Clients can specify the shape and structure of the data they need using GraphQL queries. This flexibility allows for more dynamic and tailored data retrieval compared to fixed endpoints in REST APIs.
+
+
+
+
+addToCart:
+
+HTTP Method: POST
+Request URL: http://localhost:3000/api/v1/cart/addToCart
+Headers: Content-Type: application/json
+Request Body:
+json
+Copy code
+{
+    "productId": "614fd60baf41b7e07f5e0303",
+    "days": 5
+}
+Expected Response: A JSON response with the updated cart.
+getAllCartItems:
+
+HTTP Method: GET
+Request URL: http://localhost:3000/api/v1/cart/getAllCartItems
+
+Expected Response: A JSON response containing all items in the cart.
+
+updateCartItem:
+
+HTTP Method: PUT
+Request URL: http://localhost:3000/api/v1/cart/updateCartItem
+Headers: Content-Type: application/json
+Request Body:
+json
+Copy code
+{
+    "productId": "614fd60baf41b7e07f5e0303",
+    "quantity": 3
+}
+Expected Response: A JSON response with the updated cart item.
+
+removeCartItem:
+
+HTTP Method: DELETE
+Request URL: http://localhost:3000/api/v1/cart/removeCartItem?productId=614fd60baf41b7e07f5e0303
+Expected Response: A JSON response confirming the removal of the specified item from the cart.
+removeAllCartItems:
+
+HTTP Method: DELETE
+Request URL: http://localhost:3000/api/v1/cart/removeAllCartItems
+Expected Response: A JSON response confirming the removal of all items from the cart.
+You can copy these examples into Postman and adjust the request URLs, request bodies, and headers as needed to match your specific setup. Make sure your server is running and listening on the specified port (e.g., 3000) for these requests to be successful.

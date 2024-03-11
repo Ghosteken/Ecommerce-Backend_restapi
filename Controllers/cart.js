@@ -1,110 +1,188 @@
-const Customer = require('../models/Customer');
-const { ObjectId } = require('mongoose').Types;
+import { Cart } from "../models/Cart";
+import { Product } from "../models/Product";
+import Customer from "../models/Customer"; 
+import asyncHandler from "express-async-handler";
+import validateMongoDbId from "../utils/validateMongodbId";
 
-const addToCart = async (req, res) => {
+// Add a product to the cart
+const addToCart = asyncHandler(async (req, res) => {
+  // Extract necessary data from request body and user context
+  const { productId, count, color } = req.body;
+  const { _id } = req.user;
+  
+  // Validate the user ID
+  validateMongoDbId(_id);
+  
   try {
-    const userId = req.user?.id;
-    const { productId } = req.query;
-    const { days } = req.body;
-    const user = await Customer.findOne({ _id: userId });
-    let duplicate = false;
+    // Find the customer by ID
+    const customer = await Customer.findById(_id);
+    // Find the product by ID
+    const product = await Product.findById(productId);
 
-    // Check if the product is already in the user's cart
-    user.cart.forEach((item) => {
-      if (item.id.equals(productId)) { 
-        duplicate = true;
-      }
-    });
-
-    if (duplicate) {
-      // If the product is already in the cart, increment its quantity
-      await Customer.findOneAndUpdate(
-        { _id: userId, "cart.id": ObjectId.createFromTime(productId) }, 
-        { $inc: { "cart.$.quantity": 1 } },
-        { new: true }
-      );
-      res.status(200).json(user.cart);
-    } else {
-      // If the product is not in the cart, add it
-      user.cart.push({
-        id: ObjectId.createFromTime(productId), 
-        quantity: 1,
-        date: Date.now(),
-        days: days,
-      });
-      await user.save();
-      res.status(200).json({
-        status: "success",
-        data: user.cart,
-      });
+    // Check if the product exists
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-};
 
-const getAllCartItems = async (req, res) => {
-  try {
-    const user = await Customer.findOne({ _id: req.user._id });
-    res.status(200).json({ status: "success", data: user.cart });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-};
+    // Find the cart associated with the customer
+    let cart = await Cart.findOne({ orderby: _id });
 
-const updateCartItem = async (req, res) => {
+    // If no cart exists, create a new one
+    if (!cart) {
+      cart = new Cart({
+        products: [{ product: productId, count, color, price: product.price }],
+        orderby: _id,
+      });
+    } else {
+      // If cart exists, update the existing item or add a new one
+      const existingItemIndex = cart.products.findIndex(
+        (item) => item.product.toString() === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        cart.products[existingItemIndex].count += count;
+      } else {
+        cart.products.push({ product: productId, count, color, price: product.price });
+      }
+    }
+
+    // Calculate the cart total
+    cart.cartTotal = cart.products.reduce((total, item) => {
+      return total + item.price * item.count;
+    }, 0);
+
+    // Save the updated cart
+    await cart.save();
+
+    // Respond with the updated cart
+    res.json(cart);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Remove a product from the cart
+const removeFromCart = asyncHandler(async (req, res) => {
+  // Extract necessary data from request body and user context
+  const { productId } = req.body;
+  const { _id } = req.user;
+  
+  // Validate the user ID
+  validateMongoDbId(_id);
+  
   try {
-    const userId = req.user?.id;
-    const { productId, quantity } = req.body;
-    
-    const user = await Customer.findOneAndUpdate(
-      {
-        _id: userId,
-        "cart.id": ObjectId.createFromTime(productId), 
-      },
-      { $set: { "cart.$.quantity": quantity } },
-      { new: true }
+    // Find the cart associated with the customer
+    let cart = await Cart.findOne({ orderby: _id });
+
+    // If no cart exists, return error
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    // Filter out the product to be removed
+    cart.products = cart.products.filter(
+      (item) => item.product.toString() !== productId
     );
-    
-    res.status(200).json({ status: "success", data: user.cart });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-};
 
-const removeCartItem = async (req, res) => {
+    // Calculate the updated cart total
+    cart.cartTotal = cart.products.reduce((total, item) => {
+      return total + item.price * item.count;
+    }, 0);
+
+    // Save the updated cart
+    await cart.save();
+
+    // Respond with the updated cart
+    res.json(cart);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Update the count of a product in the cart
+const updateCartItem = asyncHandler(async (req, res) => {
+  // Extract necessary data from request body and user context
+  const { productId, count } = req.body;
+  const { _id } = req.user;
+  
+  // Validate the user ID
+  validateMongoDbId(_id);
+  
   try {
-    const userId = req.user?.id;
-    const { productId } = req.query;
-    
-    
-    const user = await Customer.findOneAndUpdate(
-      { _id: userId },
-      { $pull: { cart: { id: ObjectId.createFromTime(productId) } } }, 
-      { new: true }
-    );
-    
-    res.status(200).json({ status: "success", data: user.cart });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-};
+    // Find the cart associated with the customer
+    let cart = await Cart.findOne({ orderby: _id });
 
-const removeAllCartItems = async (req, res) => {
+    // If no cart exists, return error
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    // Find the item to update in the cart
+    const itemToUpdate = cart.products.find(
+      (item) => item.product.toString() === productId
+    );
+
+    // If item is not found in the cart, return error
+    if (!itemToUpdate) {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    // Update the count of the item
+    itemToUpdate.count = count;
+
+    // Calculate the updated cart total
+    cart.cartTotal = cart.products.reduce((total, item) => {
+      return total + item.price * item.count;
+    }, 0);
+
+    // Save the updated cart
+    await cart.save();
+
+    // Respond with the updated cart
+    res.json(cart);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Retrieve the user's cart
+const getUserCart = asyncHandler(async (req, res) => {
+  // Extract user ID from request context
+  const { _id } = req.user;
+  
+  // Validate the user ID
+  validateMongoDbId(_id);
+  
   try {
-    const userId = req.user?.id;
+    // Find the cart associated with the customer and populate product details
+    const cart = await Cart.findOne({ orderby: _id }).populate({
+      path: "products.product",
+      model: "Product",
+    });
     
-    
-    const user = await Customer.findOneAndUpdate(
-      { _id: userId },
-      { $set: { cart: [] } },
-      { new: true }
-    );
-    
-    res.status(200).json({ status: "success", data: user.cart });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    // Respond with the user's cart
+    res.json(cart);
+  } catch (error) {
+    throw new Error(error);
   }
-};
+});
 
-module.exports = { addToCart, getAllCartItems, updateCartItem, removeCartItem, removeAllCartItems };
+// Empty the user's cart
+const emptyCart = asyncHandler(async (req, res) => {
+  // Extract user ID from request context
+  const { _id } = req.user;
+  
+  // Validate the user ID
+  validateMongoDbId(_id);
+  
+  try {
+    await Cart.findOneAndRemove({ orderby: _id });
+    
+  
+    res.json({ message: "Cart emptied successfully" });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+export { addToCart, removeFromCart, updateCartItem, getUserCart, emptyCart };

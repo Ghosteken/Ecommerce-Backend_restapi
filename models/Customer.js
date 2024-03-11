@@ -36,6 +36,10 @@ const customerSchema = new mongoose.Schema(
     phone: {
       type: String,
       default: '',
+    isBlocked: {
+        type: Boolean,
+        default: false,
+      },
     },
     address: {
       type: String,
@@ -45,9 +49,9 @@ const customerSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    wishlist: {
-      type: Array,
-      default: [],
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    refreshToken: {
+      type: String,
     },
   },
   { timestamps: true },

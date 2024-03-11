@@ -4,6 +4,8 @@ const bodyParser = require ("body-parser");
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const UseRoutes = require('./routes/user');
+const CartRoutes = require('./routes/Cartroutes');
+const WishlistRoutes = require('./routes/Wishlistroutes');
 
 
 
@@ -26,6 +28,8 @@ app.get("/noobs", (req, res) => {
 });
 
 app.use('/api/v1/user', UseRoutes);
+app.use('api/cart', CartRoutes);
+app.use('/api/wishlist',  WishlistRoutes);
 
 
 const connectDB = require('./config/db');

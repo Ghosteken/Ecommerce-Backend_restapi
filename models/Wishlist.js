@@ -1,18 +1,27 @@
 import mongoose from 'mongoose';
 
-const wishlistSchema = mongoose.Schema({
-  name: {
-    required: true,
-    type: String,
-    unique: 1,
-    maxlength: 100,
+const wishlistschema = mongoose.Schema({
+  products: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      count: Number,
+      color: String,
+      price: Number,
+    },
+  ],
+  cartTotal: Number,
+  totalAfterDiscount: Number,
+  orderby: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customer",
   },
-  description: {
-    required: true,
-    type: String,
-    maxlength: 10000,
-  },
+},
+{
+  timestamps: true,
 });
 
-const Wishlist = mongoose.model('Wishlist', wishlistSchema);
-export { Wishlist };
+const Wishlist = mongoose.model('Category', wishlistschema);
+export { Wishlist};
