@@ -77,3 +77,54 @@ HTTP Method: DELETE
 Request URL: http://localhost:3000/api/v1/cart/removeAllCartItems
 Expected Response: A JSON response confirming the removal of all items from the cart.
 You can copy these examples into Postman and adjust the request URLs, request bodies, and headers as needed to match your specific setup. Make sure your server is running and listening on the specified port (e.g., 3000) for these requests to be successful.
+
+/////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+Add to Cart:
+
+Set the request method to POST.
+Set the request URL to http://localhost:3000/api/cart/add-to-cart or your server's appropriate endpoint.
+In the request body, provide the required data such as productId, count, and color.
+Send the request.
+Verify that the response contains the updated cart details.
+Remove from Cart:
+
+Set the request method to POST.
+Set the request URL to http://localhost:3000/api/cart/remove-from-cart or your server's appropriate endpoint.
+In the request body, provide the productId of the item to be removed.
+Send the request.
+Verify that the response contains the updated cart details after removing the specified product.
+Update Cart Item:
+
+Set the request method to POST.
+Set the request URL to http://localhost:3000/api/cart/update-cart-item or your server's appropriate endpoint.
+In the request body, provide the productId and count of the item to be updated.
+Send the request.
+Verify that the response contains the updated cart details after updating the count of the specified product.
+User Cart:
+
+Set the request method to GET.
+Set the request URL to http://localhost:3000/api/cart/user-cart or your server's appropriate endpoint.
+Send the request.
+Verify that the response contains the user's cart details, including all products and their quantities.
+Empty Cart:
+
+Set the request method to DELETE.
+Set the request URL to http://localhost:3000/api/cart/empty-cart or your server's appropriate endpoint.
+Send the request.
+Verify that the response confirms the successful emptying of the user's cart.
+Ensure that you include any required headers or authentication tokens if your API endpoints require them. By following these steps for each API endpoint, you can thoroughly test your API functionality using Postman.
+
+
+
+
+

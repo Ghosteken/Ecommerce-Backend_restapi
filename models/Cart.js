@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-const cartSchema = mongoose.Schema({
+const cartSchema = new mongoose.Schema({
   products: [
     {
       product: {
@@ -23,5 +23,6 @@ const cartSchema = mongoose.Schema({
   timestamps: true,
 });
 
-const Cart = mongoose.model('Category', cartSchema);
-export { Cart };
+const Cart = mongoose.model('Cart', cartSchema);
+
+module.exports = Cart;

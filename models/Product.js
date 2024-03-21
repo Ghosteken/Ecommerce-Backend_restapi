@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const dateRangeSchema = new Schema({
   startDate: {
@@ -102,5 +102,5 @@ const Product = mongoose.model('Product', productSchema);
 const DateRange = mongoose.model("DateRange", dateRangeSchema);
 
 
-export { Product, DateRange };
+module.exports = Product, DateRange;
 

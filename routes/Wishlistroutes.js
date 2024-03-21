@@ -6,20 +6,19 @@ const {
   emptyWishlist,
 } = require("../Controllers/wishlist"); 
 
-// const { authMiddleware } = require("../middlewares/authMiddleware"); // Assuming authentication middleware is required
 
 const router = express.Router();
 
 // Add a product to the wishlist
-router.post("/add-to-wishlist", authMiddleware, addToWishlist);
+router.post("/add-to-wishlist",  addToWishlist);
 
 // Remove a product from the wishlist
-router.post("/remove-from-wishlist", authMiddleware, removeFromWishlist);
+router.post("/remove-from-wishlist", removeFromWishlist);
 
 // Retrieve the user's wishlist
-router.get("/user-wishlist", authMiddleware, getUserWishlist);
+router.get("/user-wishlist",  getUserWishlist);
 
 // Empty the user's wishlist
-router.delete("/empty-wishlist", authMiddleware, emptyWishlist);
+router.delete("/empty-wishlist", emptyWishlist);
 
 module.exports = router;

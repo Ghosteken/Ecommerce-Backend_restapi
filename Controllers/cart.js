@@ -1,12 +1,14 @@
-import { Cart } from "../models/Cart";
-import { Product } from "../models/Product";
-import Customer from "../models/Customer"; 
-import asyncHandler from "express-async-handler";
-import validateMongoDbId from "../utils/validateMongodbId";
+const Cart = require( '../models/Cart.js');
+const Product = require( '../models/Product.js');
+const Customer = require( '../models/Customer.js');
 
-// Add a product to the cart
+const asyncHandler = require('express-async-handler');
+
+const validateMongoDbId = require("../utils/validateMongodbId.js");
+
+
 const addToCart = asyncHandler(async (req, res) => {
-  // Extract necessary data from request body and user context
+
   const { productId, count, color } = req.body;
   const { _id } = req.user;
   
@@ -16,15 +18,15 @@ const addToCart = asyncHandler(async (req, res) => {
   try {
     // Find the customer by ID
     const customer = await Customer.findById(_id);
-    // Find the product by ID
+    
     const product = await Product.findById(productId);
 
-    // Check if the product exists
+    
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Find the cart associated with the customer
+    
     let cart = await Cart.findOne({ orderby: _id });
 
     // If no cart exists, create a new one
@@ -185,4 +187,4 @@ const emptyCart = asyncHandler(async (req, res) => {
   }
 });
 
-export { addToCart, removeFromCart, updateCartItem, getUserCart, emptyCart };
+module.exports =  { addToCart, removeFromCart, updateCartItem, getUserCart, emptyCart };

@@ -1,9 +1,10 @@
-// Import necessary models and utilities
-import { Wishlist } from "../models/Wishlist";
-import { Product } from "../models/Product";
-import Customer from "../models/Customer"; 
-import asyncHandler from "express-async-handler";
-import validateMongoDbId from "../utils/validateMongodbId";
+
+const Wishlist = require('../models/Wishlist');
+const Product = require('../models/Product');
+const Customer = require('../models/Customer');
+
+const asyncHandler = require( "express-async-handler");
+const validateMongoDbId = require ( "../utils/validateMongodbId");
 
 // Add a product to the wishlist
 const addToWishlist = asyncHandler(async (req, res) => {
@@ -144,4 +145,4 @@ const emptyWishlist = asyncHandler(async (req, res) => {
 });
 
 // Export controller functions
-export { addToWishlist, removeFromWishlist, getUserWishlist, emptyWishlist };
+module.exports = { addToWishlist, removeFromWishlist, getUserWishlist, emptyWishlist };
